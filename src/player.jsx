@@ -3,6 +3,8 @@ import { useFrame } from "@react-three/fiber";
 import { useRef, useState, useEffect } from "react";
 import * as THREE from "three";
 import Bullet from "./bullet.jsx";
+import { useTexture } from "@react-three/drei";
+
 export default function Player({ onUpdate }) {
   const ref = useRef();
   const [lane, setLane] = useState(0);
@@ -53,6 +55,14 @@ export default function Player({ onUpdate }) {
     forceRender((n) => n + 1);
   };
 
+  const updateBulletPosition = (bulletId, newPosition) => {
+    const bullet = bulletsRef.current.find(b => b.id === bulletId);
+    if (bullet) {
+      bullet.position = newPosition;
+      onUpdate?.({ bullets: bulletsRef.current });
+    }
+  };
+
   const removeBullet = (id) => {
     bulletsRef.current = bulletsRef.current.filter((b) => b.id !== id);
     forceRender((n) => n + 1);
@@ -70,9 +80,13 @@ export default function Player({ onUpdate }) {
 
   return (
     <>
-      <mesh ref={ref} position={[0, 0.5, 0]}>
+      <mesh ref={ref} position={[0, 0.5, 0]} castShadow>
         <boxGeometry args={[1, 1, 1]} />
-        <meshStandardMaterial color="blue" />
+        <meshStandardMaterial 
+          color="blue"
+          metalness={0.7}
+          roughness={0.3}
+        />
       </mesh>
 
       {bulletsRef.current.map((b) => (
@@ -80,6 +94,7 @@ export default function Player({ onUpdate }) {
           key={b.id}
           position={b.position}
           onOutOfBounds={() => removeBullet(b.id)}
+          onMove={(newPos) => updateBulletPosition(b.id, newPos)}
         />
       ))}
     </>
