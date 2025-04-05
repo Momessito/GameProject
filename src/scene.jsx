@@ -1,40 +1,49 @@
 // Scene.jsx
-import { useState, useRef } from "react";
+import { useState } from "react";
+import Ground from "./ground";
 import Player from "./player";
 import EnemyManager from "./enemyManager";
-import Ground from "./ground";
+import Background from "./background";
+import { Html } from "@react-three/drei";
 
 export default function Scene() {
   const [bullets, setBullets] = useState([]);
-  const [life, setLife] = useState(3);
+  const [score, setScore] = useState(0);
 
-  const handlePlayerUpdate = ({ bullets }) => {
-    setBullets(bullets);
+  const handlePlayerUpdate = (data) => {
+    setBullets(data.bullets);
   };
 
-  const handleEnemyKilled = (id) => {
-    console.log("💥 Inimigo destruído:", id);
+  const handleEnemyKilled = () => {
+    setScore(prev => prev + 100);
   };
 
   const handlePlayerHit = () => {
-    setLife((prev) => {
-      const next = prev - 1;
-      console.log("💔 Jogador atingido! Vida restante:", next);
-      return next;
-    });
+    setScore(0); // Reinicia a pontuação quando o jogador é atingido
   };
 
   return (
     <>
-      <ambientLight />
-      <directionalLight position={[5, 10, 5]} />
+      <Background />
+      <Ground />
       <Player onUpdate={handlePlayerUpdate} />
-      <EnemyManager
-        bullets={bullets}
+      <EnemyManager 
+        bullets={bullets} 
         onEnemyKilled={handleEnemyKilled}
         onPlayerHit={handlePlayerHit}
       />
-      <Ground />
+      
+      <Html position={[0, 4, 0]} center>
+        <div style={{
+          color: 'white',
+          padding: '10px',
+          background: 'rgba(0,0,0,0.7)',
+          borderRadius: '5px',
+          fontSize: '24px'
+        }}>
+          Pontuação: {score}
+        </div>
+      </Html>
     </>
   );
 }

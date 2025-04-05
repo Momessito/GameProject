@@ -3,7 +3,6 @@ import { useFrame } from "@react-three/fiber";
 import { useRef, useState, useEffect } from "react";
 import * as THREE from "three";
 import Bullet from "./bullet.jsx";
-
 export default function Player({ onUpdate }) {
   const ref = useRef();
   const [lane, setLane] = useState(0);

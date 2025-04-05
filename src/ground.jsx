@@ -7,12 +7,28 @@ const NUM_TILES = 3;
 
 export default function Ground() {
   const tiles = useRef([]);
+  const leftTiles = useRef([]);
+  const rightTiles = useRef([]);
 
   useFrame((state) => {
+    // Atualiza tiles centrais
     tiles.current.forEach((tile, index) => {
-      tile.position.z += 0.1; // move para trás
+      tile.position.z += 0.1;
+      if (tile.position.z > TILE_LENGTH) {
+        tile.position.z -= TILE_LENGTH * NUM_TILES;
+      }
+    });
 
-      // Quando um tile sair da visão, reposiciona ele pra frente
+    // Atualiza tiles laterais
+    leftTiles.current.forEach((tile, index) => {
+      tile.position.z += 0.1;
+      if (tile.position.z > TILE_LENGTH) {
+        tile.position.z -= TILE_LENGTH * NUM_TILES;
+      }
+    });
+
+    rightTiles.current.forEach((tile, index) => {
+      tile.position.z += 0.1;
       if (tile.position.z > TILE_LENGTH) {
         tile.position.z -= TILE_LENGTH * NUM_TILES;
       }
@@ -21,6 +37,8 @@ export default function Ground() {
 
   return (
     <>
+
+      {/* Caminho central */}
       {[...Array(NUM_TILES)].map((_, i) => (
         <mesh
           key={i}
@@ -29,6 +47,29 @@ export default function Ground() {
         >
           <boxGeometry args={[6, 0.1, TILE_LENGTH]} />
           <meshStandardMaterial color="gray" />
+        </mesh>
+      ))}
+
+      {/* Caminho da esquerda */}
+      {[...Array(NUM_TILES)].map((_, i) => (
+        <mesh
+          key={`left-${i}`}
+          ref={(el) => (leftTiles.current[i] = el)}
+          position={[-9, 0, -i * TILE_LENGTH]}
+        >
+          <boxGeometry args={[500, -0.1, TILE_LENGTH]} />
+          <meshStandardMaterial color="green" />
+        </mesh>
+      ))}
+
+      {/* Caminho da direita */}
+      {[...Array(NUM_TILES)].map((_, i) => (
+        <mesh
+          key={`right-${i}`}
+          ref={(el) => (rightTiles.current[i] = el)}
+          position={[9, 0, -i * TILE_LENGTH]}
+        >
+          <meshStandardMaterial color="darkgray" />
         </mesh>
       ))}
     </>
