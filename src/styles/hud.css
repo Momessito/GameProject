@@ -1,0 +1,143 @@
+/* src/styles/hud.css */
+.game-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    background: #050518; /* Fundo escuro para combinar */
+}
+
+.hud-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 20px;
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.score-display {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-size: 24px;
+}
+
+.health-bar {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 10px;
+    border-radius: 10px;
+    width: 200px;
+}
+
+.health-bar-inner {
+    height: 20px;
+    background: #2ecc71;
+    border-radius: 5px;
+    transition: width 0.3s ease;
+}
+
+.combo-display {
+    position: absolute;
+    top: 200px;
+    right: 20px;
+    background: rgba(255, 0, 0, 0.7);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-size: 20px;
+    animation: pulse 1s infinite;
+}
+
+.power-up-indicator {
+    position: absolute;
+    top: 200px;
+    left: 20px;
+    background: rgba(0, 0, 255, 0.7);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-size: 18px;
+}
+
+.kill-streak {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: yellow;
+    font-size: 32px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    animation: fadeOut 1s forwards;
+}
+
+.multiplier {
+    position: absolute;
+    top: 140px;
+    right: 20px;
+    background: rgba(255, 165, 0, 0.7);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-size: 18px;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+/* Estilos para garantir que o Canvas fique atrás do HUD */
+canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.game-over {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+    pointer-events: auto;
+}
+
+.game-over h2 {
+    font-size: 36px;
+    margin-bottom: 20px;
+}
+
+.game-over button {
+    background: #2ecc71;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 8px;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.game-over button:hover {
+    background: #27ae60;
+} 

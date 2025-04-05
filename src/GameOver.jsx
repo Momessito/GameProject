@@ -8,7 +8,7 @@ export default function GameOver({ score }) {
   return (
     <div
       style={{
-        position: 'absolute',
+        position: 'fixed',
         top: '50%',
         left: '50%',
         transform: 'translate(-50%, -50%)',
@@ -16,9 +16,11 @@ export default function GameOver({ score }) {
         padding: '30px',
         borderRadius: '15px',
         color: '#fff',
+        zIndex: 100000000000,
         textAlign: 'center',
         fontFamily: 'Arial, sans-serif',
-        minWidth: '300px'
+        minWidth: '300px',
+        pointerEvents: 'auto'
       }}
     >
       <h2>GAME OVER</h2>
@@ -35,7 +37,10 @@ export default function GameOver({ score }) {
           borderRadius: '5px',
           color: '#fff',
           cursor: 'pointer',
-          transition: 'background-color 0.3s'
+          transition: 'background-color 0.3s',
+          pointerEvents: 'auto',
+          position: 'relative',
+          zIndex: 100000000001
         }}
         onMouseOver={e => e.target.style.backgroundColor = '#45a049'}
         onMouseOut={e => e.target.style.backgroundColor = '#4CAF50'}
