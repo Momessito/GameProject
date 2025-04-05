@@ -3,7 +3,8 @@ import { useFrame } from "@react-three/fiber";
 import { useRef, useState, useEffect } from "react";
 import * as THREE from "three";
 import Bullet from "./bullet.jsx";
-import { useTexture } from "@react-three/drei";
+import { useGLTF, useAnimations } from "@react-three/drei";
+import stormtrooper from "./assets/stormtrooper_walk.glb";
 
 export default function Player({ onUpdate }) {
   const ref = useRef();
@@ -12,6 +13,25 @@ export default function Player({ onUpdate }) {
   const [_, forceRender] = useState(0); // força re-render
   const lastShot = useRef(0);
   const shotDelay = 300;
+
+  // Carrega o modelo 3D e suas animações
+  const { scene, animations } = useGLTF(stormtrooper);
+  const { actions } = useAnimations(animations, ref);
+
+  // Inicia a animação quando o componente montar
+  useEffect(() => {
+    // Verifica se existe uma animação e a inicia
+    const actionNames = Object.keys(actions);
+    if (actionNames.length > 0) {
+      // Pega a primeira animação disponível
+      const firstAction = actions[actionNames[0]];
+      firstAction.reset().play();
+      firstAction.setLoop(THREE.LoopRepeat);
+    }
+
+    // Log para debug - mostra todas as animações disponíveis
+    console.log("Animações disponíveis:", Object.keys(actions));
+  }, [actions]);
 
   useFrame((state) => {
     if (!ref.current) return;
@@ -78,16 +98,28 @@ export default function Player({ onUpdate }) {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);  
 
+  // Clone e configure o modelo
+  useEffect(() => {
+    if (scene) {
+      scene.traverse((child) => {
+        if (child.isMesh) {
+          child.castShadow = true;
+          child.receiveShadow = true;
+        }
+      });
+    }
+  }, [scene]);
+
   return (
     <>
-      <mesh ref={ref} position={[0, 0.5, 0]} castShadow>
-        <boxGeometry args={[1, 1, 1]} />
-        <meshStandardMaterial 
-          color="blue"
-          metalness={0.7}
-          roughness={0.3}
-        />
-      </mesh>
+      <group 
+        ref={ref} 
+        position={[0, 0.1, 0]} 
+        scale={[0.005, 0.005, 0.005]}
+        rotation={[0, 14.3, 0]}
+      >
+        <primitive object={scene} />
+      </group>
 
       {bulletsRef.current.map((b) => (
         <Bullet
@@ -100,3 +132,6 @@ export default function Player({ onUpdate }) {
     </>
   );
 }
+
+// Pré-carrega o modelo usando o caminho importado
+useGLTF.preload(stormtrooper);

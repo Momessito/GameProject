@@ -23,7 +23,7 @@ export default function Scene({ onScoreUpdate, onHealthUpdate, onGameOver }) {
         const lane = LANES_X[Math.floor(Math.random() * LANES_X.length)];
         setEnemies(prev => [...prev, {
           id: Date.now(),
-          position: [lane, 0.5, -30]
+          position: [lane || 100 , 0.1, -30]
         }]);
         lastSpawn.current = now;
       }
